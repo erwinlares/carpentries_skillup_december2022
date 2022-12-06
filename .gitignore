@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.httr-oauth
+.idea
+
+.DS_Store
+*.sty
+*.log
+*.html
+*.cls
+media/

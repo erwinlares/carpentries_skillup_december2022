@@ -1,0 +1,237 @@
+---
+name: Erwin
+surname: Lares
+#position: "Research Cyberinfrastructure Consultant"
+address: "3544 N Cedar Ridge Ct, Janesville, WI 53545"
+profilepic: "./img/me.jpg"
+www: "erwinlares.com"
+email: "erwin.lares@wisc.edu"
+github: erwinlares
+linkedin: erwin-lares
+#googlescholar: erwinlares
+#orcid: 0000-0002-3284-828X
+date: "`r format(Sys.time(), '%B %Y')`"
+headcolor: c5050c
+aboutme: "A linguist bringing data science tools and computational resources to researchers <br/> at the University of Wisconsin-Madison"
+docname: CV
+output: 
+    vitae::awesomecv
+header-includes:
+- \usepackage[utf8]{inputenc}
+- \usepackage[none]{hyphenat}
+#     - \usepackage{fontawesome5}
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+
+
+library(vitae)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(glue)
+library(readxl)
+
+
+##########################
+#specifies where the data lives
+
+ddcv <- here::here("data/data_driven_cv_data.xlsx")
+sheets <- excel_sheets(ddcv)
+
+#########################
+#reads in the individual sheets 
+
+admin_services <- readxl::read_excel(ddcv, sheet = "admin_services", na = "NA")
+affiliations <-  readxl::read_excel(ddcv, sheet = "affiliations", na = "NA")
+certifications <- readxl::read_excel(ddcv, sheet = "certifications", na = "NA")
+education <- readxl::read_excel(ddcv, sheet = "education", na = "NA")
+experience <- readxl::read_excel(ddcv, sheet = "experience", na = "NA")
+grants_and_awards <- readxl::read_excel(ddcv, sheet = "grants_and_awards", na = "NA")
+invited_teaching <- readxl::read_excel(ddcv, sheet = "invited_teaching", na = "NA")
+presentations <- readxl::read_excel(ddcv, sheet = "presentations", na = "NA")
+projects <- readxl::read_excel(ddcv, sheet = "projects", na = "NA")
+publications <- readxl::read_excel(ddcv, sheet = "publications", na = "NA")
+skills <- readxl::read_excel(ddcv, sheet = "skills", na = "NA")
+
+```
+
+
+# Education
+
+```{r education}
+
+#the `with` variable gets to be the most prominent field
+
+education %>%
+  detailed_entries(
+    with = degree,
+    what = institution,
+    why = detail,
+    when = ifelse(is.na(endYear),
+                  startYear,
+                  glue::glue("{startYear} - {endYear}", .na = "") ),    
+    where = where
+  )
+
+```
+
+# Experience
+
+```{r experience}
+
+experience %>%
+  detailed_entries(
+    with = title,
+    what = unit,
+    why = detail,
+    when = dplyr::case_when(endMonth == "Present" ~ glue("{startMonth} {startYear} - Present",.na = ""),
+                            is.na(endYear) ~ glue("{startMonth} {startYear}",.na = ""),
+                            TRUE ~ glue("{startMonth} {startYear} - {endMonth} {endYear}",.na = "")),
+    where = where
+  )
+
+```
+
+# Projects
+
+```{r projects}
+
+projects %>%
+  detailed_entries(
+    with = accomplishment,
+    what = unit,
+    why = detail,
+    when = dplyr::case_when(endMonth == "Present" ~ glue("{startMonth} {startYear} - Present",.na = ""),
+                     is.na(endYear) ~ glue("{startMonth} {startYear}",.na = ""),
+                     TRUE ~ glue("{startMonth} {startYear} - {endMonth} {endYear}",.na = "")),
+    where = where
+  )
+
+```
+
+<!-- \pagebreak -->
+# Invited Teaching
+
+```{r invited-teaching}
+
+invited_teaching |> 
+detailed_entries(
+    what = unit, 
+    with = title, 
+    when =  glue::glue("{startMonth} {startYear}",.na = ""),
+    where = where)
+
+```
+
+# Publications
+
+```{r publications}
+
+#bibliography_entries("data/publications.bib", "Publications")
+
+publications |> 
+detailed_entries(
+    what = unit, 
+    with = title, 
+    when =  startYear,
+    where = where,
+    why = detail)
+
+```
+
+# Presentations
+
+```{r presentations}
+
+presentations |> 
+#    filter( startYear %in% (year(Sys.time()) - 5):(year(Sys.time()) )) |> 
+    detailed_entries(
+        what = title, 
+        with = unit, 
+        when =  glue::glue("{startMonth} {startYear}",.na = ""),
+        where = where)
+    
+
+```
+
+# Certifications 
+
+```{r certifications}
+
+certifications |> 
+detailed_entries(
+    what = unit, 
+    with = title
+    )
+
+```
+
+# Grants and Awards 
+
+```{r grants-and-awards}
+
+grants_and_awards |> 
+detailed_entries(
+    what = unit, 
+    with = title,
+    when = ifelse(is.na(endYear),
+                  startYear,
+                  glue::glue("{startMonth} {startYear} - {endMonth} {endYear}",.na = "") ),
+    where = where
+    )
+
+```
+
+# Administrative Services 
+
+```{r admin-services}
+
+admin_services |> 
+  detailed_entries(what = unit, 
+                   with = title, 
+                   when = ifelse(is.na(endYear),
+                                 startYear,
+                                 glue::glue("{startMonth} {startYear} - {endMonth} {endYear}",.na = "") ),
+                   where = where)
+
+```
+
+# Skills
+
+```{r skills}
+
+skills %>%
+  detailed_entries(
+    with = area,
+    what = skills
+  )
+
+```
+
+<!-- \pagebreak -->
+# Affiliations
+
+```{r affiliations}
+
+affiliations %>%
+  detailed_entries(
+    with = unit
+  )
+
+```
+
+
+<!-- This sections render the resume version -->
+
+```{r eval=FALSE}
+rmarkdown::render(input = "CV.Rmd",
+                  output_format = "pdf-document",
+                  output_file = "lares_resume.pdf")
+```
+
