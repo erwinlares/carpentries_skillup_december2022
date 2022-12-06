@@ -1,4 +1,4 @@
-![Preview](./img/cv_preview.jpg)](https://github.com/erwinlares/data_driven_cv/blob/main/img/cv_preview.png)
+![Preview](img/cv_preview.jpg)]
 
 # My data-driven CV
 
