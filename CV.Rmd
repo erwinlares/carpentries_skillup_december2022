@@ -3,7 +3,7 @@ name: Erwin
 surname: Lares
 #position: "Research Cyberinfrastructure Consultant"
 address: "3544 N Cedar Ridge Ct, Janesville, WI 53545"
-profilepic: "./img/me.jpg"
+#profilepic: "./img/me.jpg"
 www: "erwinlares.com"
 email: "erwin.lares@wisc.edu"
 github: erwinlares
@@ -15,7 +15,7 @@ headcolor: c5050c
 aboutme: "A linguist bringing data science tools and computational resources to researchers <br/> at the University of Wisconsin-Madison"
 docname: CV
 output: 
-    vitae::awesomecv
+    vitae::hyndman
 header-includes:
 - \usepackage[utf8]{inputenc}
 - \usepackage[none]{hyphenat}
@@ -86,6 +86,7 @@ education %>%
 ```{r experience}
 
 experience %>%
+  arrange(desc(startYear)) |> 
   detailed_entries(
     with = title,
     what = unit,
@@ -214,7 +215,7 @@ skills %>%
 
 ```
 
-<!-- \pagebreak -->
+\pagebreak
 # Affiliations
 
 ```{r affiliations}
