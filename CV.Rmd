@@ -87,6 +87,7 @@ education %>%
 
 experience %>%
   arrange(desc(startYear)) |> 
+  filter(include_in_resume == TRUE) |> 
   detailed_entries(
     with = title,
     what = unit,
